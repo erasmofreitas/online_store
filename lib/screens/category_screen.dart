@@ -29,8 +29,11 @@ class CategoryScreen extends StatelessWidget {
           ),
         ),
         body: FutureBuilder<QuerySnapshot>(
-          future: Firestore.instance.collection("products").document(snapshot.documentID)
-            .collection("items").getDocuments(),
+          future: Firestore.instance
+              .collection("products")
+              .document(snapshot.documentID)
+              .collection("items")
+              .getDocuments(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(
@@ -41,24 +44,30 @@ class CategoryScreen extends StatelessWidget {
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   GridView.builder(
-                    padding: EdgeInsets.all(4.0),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 4.0,
-                      crossAxisSpacing: 4.0,
-                      childAspectRatio: 0.65,
-                    ),
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index){
-                      return ProductTile("grid", ProductData.fromDocument(snapshot.data.documents[index]));
-                    }),
+                      padding: EdgeInsets.all(4.0),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 4.0,
+                        crossAxisSpacing: 4.0,
+                        childAspectRatio: 0.65,
+                      ),
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (context, index) {
+                        ProductData data = ProductData.fromDocument(
+                            snapshot.data.documents[index]);
+                        data.category = this.snapshot.documentID;
+
+                        return ProductTile("grid", data);
+                      }),
                   ListView.builder(
-                    padding: EdgeInsets.all(4.0),
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index){
-                      return ProductTile("list", ProductData.fromDocument(snapshot.data.documents[index]));
-                    }
-                  ),
+                      padding: EdgeInsets.all(4.0),
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (context, index) {
+                        ProductData data = ProductData.fromDocument(
+                            snapshot.data.documents[index]);
+                        data.category = this.snapshot.documentID;
+                        return ProductTile("list", data);
+                      }),
                 ],
               );
             }
