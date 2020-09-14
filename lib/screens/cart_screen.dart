@@ -3,6 +3,9 @@ import 'package:online_store/models/cart_model.dart';
 import 'package:online_store/models/user_model.dart';
 import 'package:online_store/screens/login_screen.dart';
 import 'package:online_store/tiles/cart_tile.dart';
+import 'package:online_store/widgets/cart_price.dart';
+import 'package:online_store/widgets/discount_card.dart';
+import 'package:online_store/widgets/ship_card.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class CartScreen extends StatelessWidget {
@@ -90,7 +93,10 @@ class CartScreen extends StatelessWidget {
                       return CartTile(product);
                     }
                   ).toList(),
-                )
+                ),
+                DiscountCard(),
+                ShipCard(),
+                CartPrice((){}),
               ],
             );
           }
